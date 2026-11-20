@@ -116,3 +116,53 @@ class TimeWidgetProvider : AppWidgetProvider() {
         }
     }
 }
+
+package com.example.vremetowidget
+
+import android.app.Activity
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
+import android.os.Bundle
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
+
+class MainActivity : Activity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(40, 60, 40, 40)
+        }
+
+        val title = TextView(this).apply {
+            text = "Времето оттогава"
+            textSize = 26f
+        }
+
+        val button = Button(this).apply {
+            text = "Добави Widget"
+            setOnClickListener {
+                val manager =
+                    AppWidgetManager.getInstance(this@MainActivity)
+
+                val provider = ComponentName(
+                    this@MainActivity,
+                    TimeWidgetProvider::class.java
+                )
+
+                if (manager.isRequestPinAppWidgetSupported) {
+                    manager.requestPinAppWidget(
+                        provider, null, null
+                    )
+                }
+            }
+        }
+
+        layout.addView(title)
+        layout.addView(button)
+        setContentView(layout)
+    }
+}
+
